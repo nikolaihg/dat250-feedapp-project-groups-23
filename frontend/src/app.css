@@ -1,0 +1,157 @@
+:root {
+  /* Colors */
+  --primary-blue: #646cff;
+  --primary-blue-hover: #535bf2;
+  --primary-blue-dark: #007bff;
+  --primary-blue-dark-hover: #0056b3;
+  --danger-red: #dc3545;
+  --danger-red-hover: #c82333;
+  --border-color: #ccc;
+  --bg-dark: #242424;
+  --bg-button-dark: #1a1a1a;
+  --text-light: rgba(255, 255, 255, 0.87);
+  
+  /* Typography */
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Theme */
+  color: var(--text-light);
+  background-color: var(--bg-dark);
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#app {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Typography */
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+a {
+  font-weight: 500;
+  color: var(--primary-blue);
+  text-decoration: inherit;
+}
+
+a:hover {
+  color: var(--primary-blue-hover);
+}
+
+/* Form Elements */
+input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  background-color: var(--bg-button-dark);
+  color: var(--text-light);
+}
+
+button {
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--bg-button-dark);
+  color: var(--text-light);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+
+button:hover {
+  border-color: var(--primary-blue);
+}
+
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Button Variants */
+.primary {
+  background-color: var(--primary-blue-dark);
+  color: white;
+  border-color: var(--primary-blue-dark);
+}
+
+.primary:hover {
+  background-color: var(--primary-blue-dark-hover);
+  border-color: var(--primary-blue-dark-hover);
+}
+
+.remove-btn {
+  background-color: var(--danger-red);
+  color: white;
+  border: none;
+}
+
+.remove-btn:hover {
+  background-color: var(--danger-red-hover);
+  border-color: transparent;
+}
+
+/* Layout Components */
+.card {
+  padding: 2em;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+
+.option-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  align-items: center;
+}
+
+.option-row input {
+  flex: 1;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Page Sections */
+.create-poll,
+.create-user {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.create-user {
+  max-width: 400px;
+}
