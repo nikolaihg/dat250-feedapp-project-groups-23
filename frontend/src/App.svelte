@@ -5,10 +5,24 @@
 
   type View = "users" | "polls" | "vote";
   let current = $state<View>("users");
+
+  let user = $state({})
+  async function getCurrentUser() {
+  	const res = await fetch("/api/v1/user", {
+		method: "GET"
+	})
+	.then( response => response.json() )
+    .then( data => {
+		user = data
+	})
+  }
+  getCurrentUser()
 </script>
 
 <main>
   <h1>Poll SPA</h1>
+
+  <h2>Current user: {user.username}</h2>
 
   <nav>
     <button onclick={() => current = "users"}>Users</button>
