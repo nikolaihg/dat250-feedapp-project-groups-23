@@ -74,9 +74,10 @@
   }
 </script>
 
-<div class="create-poll">
+<div class="panel create-poll">
   <h2>Create Poll</h2>
-  
+  <p class="panel-hint">Draft a question and add options for people to vote on.</p>
+
   <div class="form-group">
     <label for="userId">Your User ID:</label>
     <input 

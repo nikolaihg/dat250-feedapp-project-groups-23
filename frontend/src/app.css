@@ -25,12 +25,21 @@
   background-color: var(--bg-dark);
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   display: flex;
-  place-items: center;
+  justify-content: center;
+  align-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: radial-gradient(circle at top, rgba(100, 108, 255, 0.12), rgba(0, 0, 0, 0.65)),
+    linear-gradient(160deg, #141414 0%, #1e1e2a 40%, #101018 100%);
 }
 
 #app {
@@ -60,12 +69,18 @@ a:hover {
 input {
   display: block;
   width: 100%;
+  max-width: 100%;
   padding: 0.5rem;
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 1rem;
   background-color: var(--bg-button-dark);
   color: var(--text-light);
+}
+
+input + input,
+input + button {
+  margin-top: 0.65rem;
 }
 
 button {
@@ -83,6 +98,8 @@ button {
 
 button:hover {
   border-color: var(--primary-blue);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(83, 91, 242, 0.22);
 }
 
 button:focus,
@@ -144,6 +161,52 @@ button:focus-visible {
   gap: 1rem;
 }
 
+.panel {
+  width: min(100%, 620px);
+  margin: 0 auto;
+  padding: 1.75rem;
+  border-radius: 16px;
+  background: rgba(15, 15, 22, 0.8);
+  box-shadow: 0 18px 35px rgba(0, 0, 0, 0.38);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  text-align: left;
+}
+
+.panel h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.panel-hint {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.95rem;
+}
+
+.vote-panel .poll {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 12px;
+  background: rgba(20, 23, 35, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.vote-panel .poll h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+.vote-panel .options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.vote-panel .options button {
+  flex: 1 0 140px;
+}
+
 /* Page Sections */
 .create-poll,
 .create-user {
@@ -155,3 +218,4 @@ button:focus-visible {
 .create-user {
   max-width: 400px;
 }
+:root {

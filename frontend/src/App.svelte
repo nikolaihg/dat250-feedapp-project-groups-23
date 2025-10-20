@@ -6,7 +6,8 @@
   type View = "users" | "polls" | "vote";
   let current = $state<View>("users");
 
-  let user = $state({})
+  type User = { username?: string };
+  let user = $state<User>({})
   async function getCurrentUser() {
   	const res = await fetch("/api/v1/user", {
 		method: "GET"

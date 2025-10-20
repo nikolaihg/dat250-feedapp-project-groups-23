@@ -19,8 +19,9 @@
   }
 </script>
 
-<div>
+<div class="panel create-user">
   <h2>Create User</h2>
+  <p class="panel-hint">Register a new account to start creating polls.</p>
   <input placeholder="Username" bind:value={username} />
   <input placeholder="Email" type="email" bind:value={email} />
   <button onclick={submit}>Create</button>

@@ -57,8 +57,9 @@
   }
 </script>
 
-<div>
+<div class="panel vote-panel">
   <h2>Vote</h2>
+  <p class="panel-hint">Choose a poll and make your voice heard.</p>
   <input
     placeholder="Your User ID"
     type="number"
