@@ -3,10 +3,9 @@ package dat250.FeedApp.controller
 import dat250.FeedApp.domain.User
 import dat250.FeedApp.manager.FeedAppManager
 import io.swagger.v3.oas.annotations.Operation
-import java.security.Principal
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -21,8 +20,7 @@ class UserController(private val feedAppManager: FeedAppManager) {
             summary = "Get current user",
             description = "Returns user information of currently logged in user"
     )
-    fun getUserData(principal: Principal): ResponseEntity<User> {
-        val oauth2User = (principal as OAuth2AuthenticationToken).principal as OAuth2User
+    fun getUserData(@AuthenticationPrincipal oauth2User: OAuth2User): ResponseEntity<User> {
 
         val userName: String? = oauth2User.getAttribute<String>("login")
         if (userName != null) {
