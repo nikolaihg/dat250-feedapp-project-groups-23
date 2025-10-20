@@ -9,7 +9,7 @@ import jakarta.persistence.Table
 
 @Entity
 @Table(name = "USERS")
-data class User(
+class User(
     @Id val username: String,
 
     @OneToMany(mappedBy = "creator", cascade = [CascadeType.ALL], orphanRemoval = true)

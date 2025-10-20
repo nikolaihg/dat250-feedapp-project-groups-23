@@ -49,14 +49,14 @@ class DomainScenarioTest {
 
         // User 2 votes on the poll
         var vote1 = Vote(publishedAt = now, voteOption = poll.voteOptions[0])
-        vote1 = vote1.copy(user = user2)
+        vote1.user = user2
         user2.votes.add(vote1)
         allVotes.add(vote1)
         assertEquals(1, allVotes.size)
 
         // User 2 changes his vote
         var vote2 = Vote(publishedAt = now.plusSeconds(60), voteOption = poll.voteOptions[1])
-        vote2 = vote2.copy(user = user2)
+        vote2.user = user2
         user2.votes.add(vote2)
         allVotes.add(vote2)
         assertEquals(2, allVotes.size)
