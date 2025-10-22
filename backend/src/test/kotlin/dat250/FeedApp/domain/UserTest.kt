@@ -18,11 +18,8 @@ class UserTest {
     @Test
     fun `user can have polls and votes added`() {
         val user = User(username = "jane_smith")
-        val poll = Poll(question = "Favorite language?", publishedAt = Instant.now(), validUntil = Instant.now())
-        val vote = Vote(publishedAt = Instant.now(), voteOption = VoteOption(caption = "Kotlin"))
-
-        user.polls.add(poll)
-        user.votes.add(vote)
+        val poll = Poll(question = "Favorite language?", publishedAt = Instant.now(), validUntil = Instant.now(), creator = user)
+        Vote(publishedAt = Instant.now(), voteOption = VoteOption(caption = "Kotlin", poll = poll), user = user)
 
         assertEquals(1, user.polls.size)
         assertEquals(1, user.votes.size)

@@ -35,11 +35,11 @@ class DomainScenarioTest {
         val poll = Poll(
             question = "Best Kotlin feature?",
             publishedAt = now,
-            validUntil = now.plusSeconds(86400)
+            validUntil = now.plusSeconds(86400),
+			creator = user1,
         )
-        poll.voteOptions.add(VoteOption(caption = "Null safety"))
-        poll.voteOptions.add(VoteOption(caption = "Extension functions"))
-        user1.polls.add(poll)
+        VoteOption(caption = "Null safety", poll = poll)
+        VoteOption(caption = "Extension functions", poll = poll)
         polls.add(poll)
 
         // List polls (shows the new poll)
@@ -48,16 +48,12 @@ class DomainScenarioTest {
         assertEquals(2, polls[0].voteOptions.size)
 
         // User 2 votes on the poll
-        var vote1 = Vote(publishedAt = now, voteOption = poll.voteOptions[0])
-        vote1.user = user2
-        user2.votes.add(vote1)
+        var vote1 = Vote(publishedAt = now, voteOption = poll.voteOptions[0], user = user2)
         allVotes.add(vote1)
         assertEquals(1, allVotes.size)
 
         // User 2 changes his vote
-        var vote2 = Vote(publishedAt = now.plusSeconds(60), voteOption = poll.voteOptions[1])
-        vote2.user = user2
-        user2.votes.add(vote2)
+        var vote2 = Vote(publishedAt = now.plusSeconds(60), voteOption = poll.voteOptions[1], user = user2)
         allVotes.add(vote2)
         assertEquals(2, allVotes.size)
 
@@ -72,8 +68,8 @@ class DomainScenarioTest {
         assertEquals(0, polls.size)
 
         // List votes (empty)
-        allVotes.removeAll { it.voteOption.poll?.id == poll.id }
-        assertEquals(2, allVotes.size) // Votes still exist
+        allVotes.removeAll { it.voteOption.poll.id == poll.id }
+        assertEquals(0, allVotes.size) // Votes still exist
 
         // But if we filter by valid polls, they're orphaned
         val validVotes = allVotes.filter { vote -> polls.any { p -> p.voteOptions.contains(vote.voteOption) } }

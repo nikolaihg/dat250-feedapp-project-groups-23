@@ -7,15 +7,23 @@ import jakarta.persistence.Table
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 
 @Entity
 @Table(name = "VOTE_OPTIONS")
 class VoteOption(
-    @Id val id: UUID = UUID.randomUUID(),
+    @Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+ 	val id: Long = 0,
 
     val caption: String,
     @ManyToOne
     @JoinColumn(name = "poll_id")
     @JsonBackReference
-    var poll: Poll? = null,
-)
+    var poll: Poll,
+) {
+	init {
+		poll.voteOptions.add(this);
+	}
+}

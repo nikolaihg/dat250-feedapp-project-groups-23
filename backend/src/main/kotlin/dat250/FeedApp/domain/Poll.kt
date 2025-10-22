@@ -9,13 +9,17 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.Table
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import java.time.Instant
 import java.util.UUID
 
 @Entity
 @Table(name = "POLLS")
 class Poll(
-    @Id val id: UUID = UUID.randomUUID(),
+    @Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+ 	val id: Long = 0,
 
     val question: String,
     val publishedAt: Instant,
@@ -27,5 +31,9 @@ class Poll(
     @ManyToOne
     @JoinColumn(name = "creator_username")
     @JsonBackReference
-    var creator: User? = null,
-)
+    var creator: User,
+) {
+	init {
+		creator.polls.add(this);
+	}
+}

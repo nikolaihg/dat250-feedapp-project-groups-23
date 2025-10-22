@@ -9,10 +9,12 @@ class PollTest {
     fun `poll is created with unique id and provided data`() {
         val now = Instant.now()
         val validUntil = now.plusSeconds(3600)
+		val user = User("testuser")
         val poll = Poll(
             question = "What's your favorite color?",
             publishedAt = now,
-            validUntil = validUntil
+            validUntil = validUntil,
+			creator = user,
         )
 
         assertNotNull(poll.id)
@@ -24,14 +26,16 @@ class PollTest {
 
     @Test
     fun `poll can have vote options added`() {
+		val user = User("testuser")
         val poll = Poll(
             question = "Pick a number",
             publishedAt = Instant.now(),
-            validUntil = Instant.now()
+            validUntil = Instant.now(),
+			creator = user,
         )
 
-        poll.voteOptions.add(VoteOption(caption = "1"))
-        poll.voteOptions.add(VoteOption(caption = "2"))
+        VoteOption(caption = "1", poll = poll)
+        VoteOption(caption = "2", poll = poll)
 
         assertEquals(2, poll.voteOptions.size)
     }

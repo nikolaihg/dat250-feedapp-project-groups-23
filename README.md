@@ -28,28 +28,27 @@
 classDiagram
 
 class User {
-  - id: UUID
-  - tbd: OAuth
+  - id: String
 }
 class Poll {
-  - id: UUID
+  - id: Long
   - question: String
   - publishedAt: Instant
   - validUntil: Instant
 }
 
 class Vote {
-  - id: UUID
+  - id: Long
   - publishedAt: Instant
 }
 class VoteOption {
-  - id: UUID
+  - id: Long
   - caption: String
 }
 
 
 User *-- "0..n" Poll
 Poll *-- "2..n" VoteOption
-Vote "0..n" --* VoteOption
+VoteOption *-- "0..n" Vote
 User *-- "0..n" Vote
 ```

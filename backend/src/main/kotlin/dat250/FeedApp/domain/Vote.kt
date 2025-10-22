@@ -6,13 +6,17 @@ import jakarta.persistence.Table
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import java.time.Instant
 import java.util.UUID
 
 @Entity
 @Table(name = "VOTES")
 class Vote(
-    @Id val id: UUID = UUID.randomUUID(),
+    @Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+ 	val id: Long = 0,
 
     val publishedAt: Instant,
 
@@ -23,5 +27,9 @@ class Vote(
     @ManyToOne
     @JoinColumn(name = "user_username")
     @JsonBackReference
-    var user: User? = null,
-)
+    var user: User,
+) {
+	init {
+		user.votes.add(this);
+	}
+}
