@@ -116,3 +116,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+### Enviroment ###
+.env
