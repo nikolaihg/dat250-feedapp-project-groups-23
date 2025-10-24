@@ -3,8 +3,8 @@ FROM gradle:8.14.3-alpine AS builder
 WORKDIR /home/gradle
 
 # Copy build config and source
-COPY settings.gradle.kts build.gradle.kts ./
-COPY gradle gradle
+COPY ../settings.gradle.kts build.gradle.kts ./
+COPY ../gradle gradle
 COPY src src
 
 # Build the jar (skip tests for faster builds)

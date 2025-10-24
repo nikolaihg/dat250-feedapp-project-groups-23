@@ -53,3 +53,12 @@ allOpen {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
+tasks.register("buildFrontend") {
+    dependsOn(":frontend:copyWebApp")
+}
+
+tasks.named("processResources") {
+    dependsOn("buildFrontend")
+}
+
