@@ -54,29 +54,43 @@ Vote "0..n" --* VoteOption
 User *-- "0..n" Vote
 ```
 
+### Running the project
+#### Create `.env` file:
+```bash
+# example .env
+GITHUB_OAUTH_CLIENT_ID=your_client_id
+GITHUB_OAUTH_CLIENT_SECRET=your_client_secret
+SPRING_REDIS_HOST=redis
+SPRING_REDIS_PORT=6379
+SPRING_RABBITMQ_HOST=rabbitmq
+SPRING_RABBITMQ_PORT=5672
+```
 
-### Docker
+#### Docker
 1. Build and copy the frontend  
 From the project root, run:
 ```bash
 ./gradlew :frontend:copyWebApp
 ```
-
-2. Create .env for storing github oath:
-```
-# example .env
-GITHUB_OAUTH_CLIENT_ID=your_client_id
-GITHUB_OAUTH_CLIENT_SECRET=your_client_secret
-```
-
-3. Build image:  
+2. Build image:  
 ```bash
 docker build -t feedapp .
 ```
-4. Run image:  
+3 Run image:  
 ```bash
 docker run --rm --env-file .env -p 8080:8080 feedapp
 ```
 
 #### Running using compose:
-- 
+- Run:  
+```bash
+docker compose up --build
+```
+- Stop:  
+```bash
+docker compose down
+```   
+- Stop and delete all data:  
+```bash
+docker compose down -v
+```
