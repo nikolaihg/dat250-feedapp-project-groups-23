@@ -1,6 +1,7 @@
 package dat250.FeedApp.controller
 
 import dat250.FeedApp.domain.Vote
+import dat250.FeedApp.domain.VoteOptionCount
 import dat250.FeedApp.manager.FeedAppManager
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
@@ -24,6 +25,15 @@ class VoteController(private val feedAppManager: FeedAppManager) {
     )
     fun getAllVotes(@PathVariable("id") id: Long): ResponseEntity<List<Vote>> {
         return ResponseEntity.ok(feedAppManager.getVotesForPoll(id))
+    }
+
+    @GetMapping("/options/polls/{id}")
+    @Operation(
+            summary = "Get votes per vote options for poll",
+            description = "Returns list of vote options with count of votes per option"
+    )
+    fun getAllVoteOptions(@PathVariable("id") id: Long): ResponseEntity<List<VoteOptionCount>> {
+        return ResponseEntity.ok(feedAppManager.getVoteOptionCountForPoll(id))
     }
 
     @PostMapping

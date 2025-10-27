@@ -6,6 +6,7 @@ import dat250.FeedApp.domain.Poll
 import dat250.FeedApp.domain.User
 import dat250.FeedApp.domain.Vote
 import dat250.FeedApp.domain.VoteOption
+import dat250.FeedApp.domain.VoteOptionCount
 import dat250.FeedApp.repository.PollRepository
 import dat250.FeedApp.repository.UserRepository
 import dat250.FeedApp.repository.VoteOptionRepository
@@ -65,4 +66,8 @@ class FeedAppManager(
         // TODO: caching
         return voteRepo.findAllVotesByPollId(id)
     }
+
+    // TODO: caching
+    fun getVoteOptionCountForPoll(id: Long): List<VoteOptionCount> =
+            voteOptionRepo.findVoteOptionCountsByPollId(id)
 }
