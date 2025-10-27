@@ -1,3 +1,3 @@
-rootProject.name = "poll-manager"
+rootProject.name = "feed-app"
 include("backend")
 include("frontend")

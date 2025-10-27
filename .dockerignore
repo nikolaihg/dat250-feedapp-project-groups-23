@@ -7,10 +7,10 @@
 **/.DS_Store
 **/.classpath
 **/.dockerignore
-.env
+backend/.env
 **/.factorypath
 **/.git
-**/.gitignore
+../.idea/.gitignore
 **/.idea
 **/.project
 **/.sts4-cache

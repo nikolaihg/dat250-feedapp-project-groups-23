@@ -12,7 +12,7 @@ services:
       - "15672:15672"
 
   app:
-    build: .
+    build: backend
     container_name: feed-app
     ports:
       - "8080:8080"

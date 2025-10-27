@@ -1,1 +1,1 @@
-rootProject.name = "feed-app"
+rootProject.name = "FeedApp"

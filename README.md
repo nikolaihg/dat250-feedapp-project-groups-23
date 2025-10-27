@@ -53,3 +53,30 @@ Poll *-- "2..n" VoteOption
 Vote "0..n" --* VoteOption
 User *-- "0..n" Vote
 ```
+
+
+### Docker
+1. Build and copy the frontend  
+From the project root, run:
+```bash
+./gradlew :frontend:copyWebApp
+```
+
+2. Create .env for storing github oath:
+```
+# example .env
+GITHUB_OAUTH_CLIENT_ID=your_client_id
+GITHUB_OAUTH_CLIENT_SECRET=your_client_secret
+```
+
+3. Build image:  
+```bash
+docker build -t feedapp .
+```
+4. Run image:  
+```bash
+docker run --rm --env-file .env -p 8080:8080 feedapp
+```
+
+#### Running using compose:
+- 
