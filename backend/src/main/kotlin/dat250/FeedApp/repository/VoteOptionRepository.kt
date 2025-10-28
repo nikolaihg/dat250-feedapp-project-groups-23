@@ -7,8 +7,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.query.Param
 
 interface VoteOptionRepository : CrudRepository<VoteOption, String> {
-    // new dat250.FeedApp.domain.
-    // SELECT VoteOptionCount(o.caption, COUNT(v.id))
     @Query(
             """
         SELECT new dat250.FeedApp.domain.VoteOptionCount(o.caption, COUNT(v.id))

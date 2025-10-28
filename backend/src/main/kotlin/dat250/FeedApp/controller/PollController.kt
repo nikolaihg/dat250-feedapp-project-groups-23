@@ -1,6 +1,8 @@
 package dat250.FeedApp.controller
 
 import dat250.FeedApp.domain.Poll
+import dat250.FeedApp.domain.Vote
+import dat250.FeedApp.domain.VoteOptionCount
 import dat250.FeedApp.manager.FeedAppManager
 import io.swagger.v3.oas.annotations.Operation
 import java.time.Instant
@@ -45,6 +47,24 @@ class PollController(private val feedAppManager: FeedAppManager) {
     fun deletePoll(@PathVariable("id") id: Long): ResponseEntity<Void> {
         feedAppManager.deletePoll(id)
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build()
+    }
+
+    @GetMapping("/{id}/votes")
+    @Operation(
+            summary = "Get votes for poll",
+            description = "Returns a list of all votes on a poll"
+    )
+    fun getAllVotes(@PathVariable("id") id: Long): ResponseEntity<List<Vote>> {
+        return ResponseEntity.ok(feedAppManager.getVotesForPoll(id))
+    }
+
+    @GetMapping("/{id}/voteCount")
+    @Operation(
+            summary = "Get votes per vote options for poll",
+            description = "Returns list of vote options with count of votes per option"
+    )
+    fun getAllVoteOptions(@PathVariable("id") id: Long): ResponseEntity<List<VoteOptionCount>> {
+        return ResponseEntity.ok(feedAppManager.getVoteOptionCountForPoll(id))
     }
 
     public data class PollRequest(

@@ -1,15 +1,12 @@
 package dat250.FeedApp.controller
 
 import dat250.FeedApp.domain.Vote
-import dat250.FeedApp.domain.VoteOptionCount
 import dat250.FeedApp.manager.FeedAppManager
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.core.user.OAuth2User
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -18,23 +15,6 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/api/v1/votes")
 class VoteController(private val feedAppManager: FeedAppManager) {
-    @GetMapping("/polls/{id}")
-    @Operation(
-            summary = "Get votes for poll",
-            description = "Returns a list of all votes on a poll"
-    )
-    fun getAllVotes(@PathVariable("id") id: Long): ResponseEntity<List<Vote>> {
-        return ResponseEntity.ok(feedAppManager.getVotesForPoll(id))
-    }
-
-    @GetMapping("/options/polls/{id}")
-    @Operation(
-            summary = "Get votes per vote options for poll",
-            description = "Returns list of vote options with count of votes per option"
-    )
-    fun getAllVoteOptions(@PathVariable("id") id: Long): ResponseEntity<List<VoteOptionCount>> {
-        return ResponseEntity.ok(feedAppManager.getVoteOptionCountForPoll(id))
-    }
 
     @PostMapping
     @Operation(summary = "Create vote", description = "Creates a vote on a given poll for the user")
