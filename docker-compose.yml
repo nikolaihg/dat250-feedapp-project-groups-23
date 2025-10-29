@@ -1,0 +1,35 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:latest
+    container_name: rabbitmq
+    ports:
+      - "5672:5672" # AMQP
+      - "15672:15672" # Dashboard
+    restart: unless-stopped
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: feed-app
+    ports:
+      - "8080:8080"
+    env_file:
+      - ".env"
+    environment:
+      SPRING_REDIS_HOST: redis
+      SPRING_RABBITMQ_HOST: rabbitmq
+    depends_on:
+      - redis
+      - rabbitmq
+
+volumes:
+  rabbitmq_data:

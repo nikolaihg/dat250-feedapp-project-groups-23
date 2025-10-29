@@ -40,4 +40,4 @@ out/
 .kotlin
 
 ### Enviroment ###
-.env
+../.env
