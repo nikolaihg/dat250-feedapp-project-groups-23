@@ -3,8 +3,8 @@
   import CreatePoll from "./lib/CreatePoll.svelte";
   import Vote from "./lib/Vote.svelte";
 
-  type View = "users" | "polls" | "vote";
-  let current = $state<View>("users");
+  type View =  "polls" | "vote";
+  let current = $state<View>("polls");
 
   type User = { username?: string };
   let user = $state<User>({})
@@ -26,14 +26,12 @@
   <h2>Current user: {user.username}</h2>
 
   <nav>
-    <button onclick={() => current = "users"}>Users</button>
+    
     <button onclick={() => current = "polls"}>Polls</button>
     <button onclick={() => current = "vote"}>Vote</button>
   </nav>
 
-  {#if current === "users"}
-    <CreateUser />
-  {:else if current === "polls"}
+  {#if current === "polls"}
     <CreatePoll />
   {:else if current === "vote"}
     <Vote />

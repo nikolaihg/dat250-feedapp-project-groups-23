@@ -93,3 +93,27 @@ docker compose down
 ```bash
 docker compose down -v
 ```
+
+
+# DAT-250 Project Progess Presentation - Group 23
+### Tech stack
+- Backend:
+    - Spring Boot  
+        - with Kotlin <- feature technology    
+        - github Oauth for security  
+        - RabbitMQ (not yet implemented)  
+        - Redis (not yet implemented)  
+- Frontend:
+    - svelte
+    - not connected yet
+- CI/CD
+    - Docker  
+        - compose for gralde+redis+rabbitmq  
+        - image pushed on docker hub  
+        - github-actions  
+
+### Potential Hypotheses for technology assesment
+- (Productivity): Kotlin reduces source-code size and accelerates implementation of domain logic compared with Java. Also discuss kotlin integration in other IDEs than IntelliJ
+- (Safety): Kotlin’s type system decreases the incidence of runtime null-pointer exceptions.
+- (Readability and Maintainability): Developers perceive Kotlin code as more readable and easier to maintain.
+- (Performance Cost): Kotlin compilation or runtime overhead does not significantly degrade build or execution times relative to Java.
