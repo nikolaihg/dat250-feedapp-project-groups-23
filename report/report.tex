@@ -1,5 +1,8 @@
 \documentclass[11pt]{article}
 
+\usepackage{array}
+\usepackage{listings}
+\usepackage{booktabs}
 \usepackage{a4wide}
 \usepackage{mathptm}
 \usepackage{xspace}
@@ -13,6 +16,7 @@
 \usepackage{listings}
 \usepackage{color}
 \usepackage{hyperref}
+\usepackage{float}
 
 \definecolor{dkgreen}{rgb}{0,0.6,0}
 \definecolor{gray}{rgb}{0.5,0.5,0.5}
@@ -38,10 +42,10 @@
 
 \begin{titlepage}
     \centering
-    {\Large{Western Norway University of Applied Sciences}}\\[1em] 
+    {\Large{Western Norway University of Applied Sciences}}\\[1em]
     {\Large DAT250: Advanced Software Technologies \\[1em]}
     \vspace{1cm}
-    {\Huge \textbf{My Best Software Technology Evaluation Project Ever}}\\[2em]
+    {\Huge \textbf{Replacing Java with Kotlin in the Technology Stack for FeedApp Project}}\\[2em]
     \vspace{1cm}
     {\Large Authors:}\\[0.5em]
     {\large Dragos Slovineanu  \\ Jannis Luke Petschenka
@@ -60,18 +64,19 @@
 
 \end{abstract}
 
+\newpage
+
 %\input{commands}
 
 \input{sections/introduction}
+
+\newpage
 
 \input{sections/design}
 
 \input{sections/technology}
 
-
 \input{sections/implementation}
-
-
 
 \input{sections/conclusion}
 

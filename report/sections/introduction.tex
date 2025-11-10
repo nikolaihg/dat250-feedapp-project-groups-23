@@ -1,20 +1,24 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Approximately 1 page on:
+\subsection{Motivation}
+Kotlin is a language that aims to solve many of the painpoints associated with Java as a programming language, while still utilizing the benefits around the JVM ecosystem, while also providing stronger type safety, null-safety features, and a more expressive syntax that combines principles from functional programming with object-oriented design.
 
-\begin{itemize}
+In this project, we aim to assess whether Kotlin combined with the auto-configuration and dependency injection mechanisms of Spring Boot can lead to faster, more concise, and more maintainable development while preserving the robustness required for enterprise applications.
 
-\item A brief introduction to the prototype implementation and topic of the project.
+\subsection{Briefly about the prototype}
+Our \textit{FeedApp} protoype is implemented as a full-stack web application where users can create, view and vote on polls, as specified in the project description. Users interacts with the backend-system through a web interface built in Svelte, that triggers REST-API endpoints. This interaction with the backend is secured via Github Oath.
 
-\item Discuss (briefly) the technology stack that has been selected
+The backend system in built using Spring Boot with Kotlin. Peristance is implemented using JPA and a H2 relational database for storage. A redis cache mitigates potential delays for the polls. And poll events are published though RabbitMQ as a message broker, enabling external clients to subscribe to events. The entire system is containerised with docker, with images for Gradle, Redis and RabbitMQ orhestraded through \textit{docker compose}. CI/CD-integration is done via github-actions and a image is uploaded to dockerhub.
 
-\item A brief account of the results that have been obtained in the project.
+\subsection{Results}
+The resulting prototype demonstrates that Kotlin can be integrated seamlessly within the Spring Boot ecosystem and CI/CD toolchains.
 
-\item A one paragraph overview at the end, explaining how the rest of the report is / has been organised.
+\noindent(...)
 
-\end{itemize}
-
-\noindent
-This rest of this report is organised as follows:
-Section~\ref{sec:design} gives an ....
+\subsection{Overview}
+The rest of this report is organised as follows:
+Section~\ref{sec:design} presents the design of the FeedApp prototype, including its use cases, domain model, and architecture.
+Section~\ref{sec:technology} contains a technology assessment of Kotlin according to the Brown and Wallnau framework.
+Section~\ref{sec:implementation} describes the implementation details and integration of the components.
+Finally, Section~\ref{sec:conclusion} concludes the report and summarizes the lessons learned from applying Kotlin within an enterprise-oriented stack.

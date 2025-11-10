@@ -8,7 +8,7 @@ This part and other parts of the report probably needs to refer to
 figures. Figure~\ref{fig:framework} from \cite{brown:96} just
 illustrates how figure can be included in the report.
 
-\begin{figure}[thb]
+\begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.5]{figs/framework.png}
 	\caption{Software technology evaluation framework.}
@@ -21,8 +21,93 @@ write where the technology comes from, its history, its context and what problem
 Consider drawing a graph like in \cite{brown:96}.
 
 \subsection{Experiment Design}
+\subsubsection{Introduction}
 
-Write you hypotheses about what benefits the technology bring and how you can support or reject them via experiments.
+The selection of the programming language is one of the first and most significant decisions in development. It reflects productivity, quality, and maintainability of the software being developed. In today's back-end era, the default pick of enterprise systems remains Java. This is because the language is mature, stable, and highly supported. Kotlin, a fairly new statically typed programming language, is threatening Java. It is completely compatible with Java and enjoys the official backing of the Spring Framework. Kotlin is guaranteed to be safer and shorter to code without sacrificing compatibility with current JVM technologies. This paper aims to utilize Kotlin rather than Java in building a web application of voting polls on the Brown and Wallnau's Technology Delta Framework (1999). The said framework provides a systematic way of establishing the value of a technology over another and the consequent use of the technology genealogies, delta feature sets, and real application case scenarios. The strategy uses the trade-off between value and risk and the next value of technology.
+
+
+The choice of the application, REST-based poll-voting feature with user support for creating polls, voting, and viewing results in real-time is a realistic and challenging backend development project. It requires the capability to manage system concurrency, ensure transactional consistency of the system, provide system scalability and fast feature iteration. It is therefore well-suited to test out some of Kotlin's new language features such as null-safety, coroutines, data classes, and type inference.
+
+
+This research compares Kotlin and Java, not as distinct programming languages but as different technology stacks to solve the same application development issue in a given context.
+
+It aims to establish whether Kotlin brings a real improvement in a programmer's productivity and system stability as long as there are no compromises in execution performance and interoperability. Following Brown and Wallnau, the experiment aims to provide a justification for Kotlin adoption in the proposed software situation, evidenced by facts through descriptive modeling, experiment design, and evaluation.
+
+\subsection{Descriptive Modelling}
+The first phase of the Technology Delta Framework involves constructing a descriptive model of the technologies being compared. This stage identifies their genealogy, situates them within the problem habitat, and defines the feature deltas that distinguish one technology from the other. The goal is to establish a clear conceptual understanding of what Kotlin introduces beyond Java, before any empirical testing is undertaken.
+
+\subsubsection{Technology Genealogy}
+Java and Kotlin have a shared family of technologies, the Java Virtual Machine (JVM) platform.
+Java is an object-orientated statically typed programming language that was developed by Sun Microsystems in 1995. Java became popular due to its portability, mature tooling, and rich libraries. The design of Java was based on backward compatibility and explicitness. Java is a secure but verbose choice for most large systems, and increasingly Java has added more functional programming capabilities such as lambdas, streams, records, sealed classes, and virtual threads. That is, Java meeting the needs of expressiveness and concurrency.
+Kotlin was created by JetBrains in 2011. Kotlin was marketed as a practical evolution of Java.
+It was designed to solve Java's verbosity, its null-safety gap, and poor support for modern development paradigms with complete Java library and framework interoperability. It is also formally supported by notable JVM frameworks like Spring and Android and compiles to the same JVM bytecode. The design of Kotlin is conciseness-focused and safety, with interoperability, whereby one may use a more expressive syntax and a stable type system. Kotlin does not replace Java yet, however, it can be said to be an evolutionary offspring on the JVM family tree. It takes the core features of Java and extends them with other language elements from functional languages and statically typed languages like Scala, Swift, and C\#.
+
+\subsubsection{Problem Habitat}
+
+\subsubsection{Feature Deltas}
+
+The \textit{feature deltas} represent the specific technological innovations or differences introduced by Kotlin relative to Java.
+These are the ``points of departure'' that may influence quality, cost, or performance outcomes within this application's habitat.
+
+\begin{table}[H]
+\centering
+\caption{Feature Deltas between Java and Kotlin}
+\renewcommand{\arraystretch}{1.3}
+\begin{tabular}{@{}p{0.17\linewidth} p{0.17\linewidth} p{0.17\linewidth} p{0.17\linewidth}@{}}
+\toprule
+\textbf{Feature Delta} & \textbf{Java (Baseline)} & \textbf{Kotlin (New Capability)} & \textbf{Potential Impact} \\
+\midrule
+\textbf{Null-safety} &
+Nullable references unchecked at compile time &
+Non-nullable types enforced by compiler &
+Reduces null pointer exceptions and improves reliability. \\
+
+\textbf{Data classes} &
+Verbose POJO definitions or JDK records (since Java 16) &
+One-line \texttt{data class} with auto-generated methods &
+Reduces boilerplate; increases development speed and readability. \\
+
+\textbf{Type inference and concise syntax} &
+Explicit type declarations &
+Implicit typing with smart inference &
+Simplifies code and reduces cognitive load on developers. \\
+
+\textbf{Coroutines and structured concurrency} &
+Threads, Executors, \texttt{CompletableFuture}, or Virtual Threads &
+Lightweight coroutines with \texttt{suspend} functions &
+Improves scalability and simplifies asynchronous programming. \\
+
+\textbf{Extension functions} &
+Utility methods via static helper classes &
+Ability to attach behaviour directly to existing classes &
+Enhances readability and enables domain-specific DSLs (e.g., Spring configuration). \\
+
+\textbf{Sealed and inline classes} &
+Limited polymorphic control (until Java 17) &
+Exhaustive \texttt{when} expressions and sealed hierarchies &
+Safer domain modelling and compile-time exhaustiveness checks. \\
+
+\textbf{Interop with Java} &
+Native language; direct compatibility &
+Full interop using \texttt{@Jvm*} annotations and mixed modules &
+Enables gradual adoption and reuse of existing Java codebases. \\
+
+\textbf{Tooling and ecosystem support} &
+Broad IDE and build support (Eclipse, IntelliJ, Gradle) &
+First-class support in IntelliJ IDEA, Gradle, and Spring Boot &
+Comparable or improved developer experience and productivity. \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+From a descriptive perspective, Kotlin’s deltas can be grouped into three broad categories:
+\begin{enumerate}
+    \item \textbf{Safety} – achieved through null-safety and sealed type hierarchies.
+    \item \textbf{Expressiveness} – enabled by concise syntax, data classes, and extension functions.
+    \item \textbf{Concurrency and performance} – improved through lightweight coroutines and structured concurrency.
+\end{enumerate}
+
+These deltas form the foundation for the next phase of the framework—designing controlled experiments and refutable hypotheses to measure Kotlin’s actual added value over Java within this software habitat.
 
 \subsection{Experiment Evaluation}
 
