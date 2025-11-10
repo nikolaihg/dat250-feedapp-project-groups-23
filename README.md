@@ -94,6 +94,22 @@ docker compose down
 docker compose down -v
 ```
 
+### RabbitMQ messaging
+- `feedapp.events` topic exchange is created automatically with durable queues `feedapp.poll.created.queue` and `feedapp.vote.cast.queue`.
+- When a poll is created the backend emits a `PollCreatedEvent` (routing key `poll.created`); casting a vote emits a `VoteCastEvent` (`vote.cast`).
+- Both queues are consumed by the backend so the events become visible in the logs without additional services, and other services can bind to the same exchange to react to changes.
+- Override queue/exchange names through the `feedapp.messaging.*` properties or the corresponding environment variables in `application.yml`.
+
+### Redis caching
+- Poll vote listings (`pollVotes` cache) and vote option counts (`pollVoteCounts`) are cached in Redis for the duration configured by `feedapp.cache.ttl` (default 60 seconds).
+- Casting or deleting votes/polls automatically invalidates the relevant cache entries to keep data fresh.
+- Redis host/port values are picked up from `.env` (`SPRING_REDIS_HOST`, `SPRING_REDIS_PORT`), matching the docker-compose setup.
+
+### Frontend usage
+- The Svelte SPA is served by the Spring Boot backend once you run `./gradlew :frontend:copyWebApp` followed by `docker compose up --build` (or `./gradlew bootRun` for local dev).
+- Navigate to `http://localhost:8080/oauth2/authorization/github` to sign in; after the callback the SPA automatically detects the authenticated user via `/api/v1/user`.
+- Creating polls and casting votes now call `/api/v1/polls` and `/api/v1/votes` respectively, so every action is reflected immediately in the backend (and the RabbitMQ/Redis integrations).
+
 
 # DAT-250 Project Progess Presentation - Group 23
 ### Tech stack
@@ -101,11 +117,10 @@ docker compose down -v
     - Spring Boot  
         - with Kotlin <- feature technology    
         - github Oauth for security  
-        - RabbitMQ (not yet implemented)  
-        - Redis (not yet implemented)  
+        - RabbitMQ events for poll/vote lifecycle  
+        - Redis caching for poll results  
 - Frontend:
-    - svelte
-    - not connected yet
+    - svelte SPA wired to the Spring API (`/api/v1/**`)
 - CI/CD
     - Docker  
         - compose for gralde+redis+rabbitmq  
