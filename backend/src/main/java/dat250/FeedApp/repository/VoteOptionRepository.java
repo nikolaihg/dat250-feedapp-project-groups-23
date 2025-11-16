@@ -1,0 +1,24 @@
+package dat250.FeedApp.repository;
+
+import dat250.FeedApp.domain.VoteOption;
+import dat250.FeedApp.domain.VoteOptionCount;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+public interface VoteOptionRepository extends CrudRepository<VoteOption, String> {
+	@Query("""
+			    SELECT new dat250.FeedApp.domain.VoteOptionCount(o.caption, COUNT(v.id))
+			    FROM VoteOption o
+			    LEFT JOIN Vote v ON o.id = v.voteOption.id
+			    WHERE o.poll.id = :pollId
+			    GROUP BY o.caption
+			    ORDER BY o.caption
+			""")
+	List<VoteOptionCount> findVoteOptionCountsByPollId(@Param("pollId") Long pollId);
+
+	VoteOption findByPollIdAndCaption(Long pollId, String caption);
+}
