@@ -207,6 +207,25 @@ button:focus-visible {
   flex: 1 0 140px;
 }
 
+.vote-panel .voteOptionCounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.vote-panel .voteOptionCounts table {
+    width: 100%;
+    border-collapse: collapse; /* Ensure borders collapse into a single line */
+    margin: 20px 0;
+}
+
+.vote-panel .voteOptionCounts  th, td {
+    padding: 12px 20px;
+    text-align: center; /* Center text horizontally */
+    vertical-align: middle; /* Center text vertically */
+    border: 1px solid #ddd; /* Add borders between cells */
+}
+
 /* Page Sections */
 .create-poll,
 .create-user {

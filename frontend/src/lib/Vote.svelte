@@ -9,11 +9,17 @@
     caption: string;
   }
 
+  interface VoteOptionCount {
+  	caption: string;
+	voteCount: number;
+  }
+
   interface Poll {
     id: number;
     question: string;
     validUntil: string;
     voteOptions: VoteOption[];
+	voteOptionCounts: VoteOptionCount[];
   }
 
   let polls = $state<Poll[]>([]);
@@ -36,6 +42,7 @@
         throw new Error(await res.text());
       }
       polls = await res.json();
+	  await loadVoteOptionCountsForPolls();
     } catch (err) {
       console.error("Failed to load polls", err);
       polls = [];
@@ -43,6 +50,23 @@
     } finally {
       loading = false;
     }
+  }
+
+  async function loadVoteOptionCountsForPolls() {
+  	await polls.forEach(async (poll: Poll) => {
+		try {
+		  const res = await fetch(`/api/v1/polls/${poll.id}/voteCount`, { credentials: "same-origin" });
+		  if (!res.ok) {
+			throw new Error(await res.text());
+		  }
+		  let voteOptionCount = await res.json();
+		  console.log(voteOptionCount);
+		  poll.voteOptionCounts = voteOptionCount;
+		} catch (err) {
+		  console.error("Failed to load poll vote counts", error);
+			 error = "Could not load polls. Try again.";
+		}
+	});
   }
 
   export async function reload() {
@@ -118,6 +142,24 @@
             </button>
           {/each}
         </div>
+		<div class="voteOptionCounts">
+			<table>
+			  <thead>
+				<tr>
+				  <th>Vote Option</th>
+				  <th>Vote Count</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				  {#each poll.voteOptionCounts as voc}
+				  <tr>
+					<td>{voc.caption}</td>
+					<td>{voc.voteCount}</td>
+				  </tr>
+				  {/each}
+			  </tbody>
+			</table>
+		</div>
       </div>
     {/each}
   {/if}
