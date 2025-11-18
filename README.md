@@ -57,8 +57,8 @@ User *-- "0..n" Vote
 #### Create `.env` file:
 ```bash
 # example .env
-GITHUB_OAUTH_CLIENT_ID=your_client_id
-GITHUB_OAUTH_CLIENT_SECRET=your_client_secret
+OAUTH_CLIENT_ID=your_client_id
+OAUTH_CLIENT_SECRET=your_client_secret
 SPRING_REDIS_HOST=redis
 SPRING_REDIS_PORT=6379
 SPRING_RABBITMQ_HOST=rabbitmq
