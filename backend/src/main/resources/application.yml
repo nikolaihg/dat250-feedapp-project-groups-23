@@ -24,3 +24,18 @@ spring:
     redis:
       host: ${SPRING_REDIS_HOST:localhost}
       port: ${SPRING_REDIS_PORT:6379}
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+
+feedapp:
+  cache:
+    ttl: PT60S
+  messaging:
+    exchange: feedapp.events
+    poll-created:
+      queue: feedapp.poll.created.queue
+      routing-key: poll.created
+    vote-cast:
+      queue: feedapp.vote.cast.queue
+      routing-key: vote.cast

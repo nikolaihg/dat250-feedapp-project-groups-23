@@ -1,75 +1,70 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
+  const props = $props<{ user: { username: string } | null }>();
+  const user = $derived(props.user);
+
+  const dispatch = createEventDispatcher<{ "poll-created": void }>();
+
   let question = $state("");
   let options = $state<string[]>(["", ""]);
-  let createdByUserId = $state<number | null>(null);
   let validUntil = $state<string>("");
+  let submitting = $state(false);
 
   function addOption() {
-    options.push("");
+    options = [...options, ""];
   }
 
   function removeOption(index: number) {
     if (options.length > 2) {
-      options.splice(index, 1);
+      options = options.filter((_, i) => i !== index);
     }
   }
 
   async function submit() {
-    if (!question || options.some(o => !o.trim()) || !createdByUserId) {
-      alert("Please fill in all fields including user ID");
+    if (!user) {
+      alert("Sign in before creating a poll.");
+      return;
+    }
+    if (!question.trim() || options.some((o) => !o.trim())) {
+      alert("Provide a question and at least two option texts.");
+      return;
+    }
+    if (!validUntil) {
+      alert("Select when the poll should expire.");
       return;
     }
 
+    submitting = true;
     try {
-      const pollPayload = {
-        question,
-        publishedAt: null,
-        validUntil: validUntil ? new Date(validUntil).toISOString() : null,
-        createdByUserId
+      const payload = {
+        question: question.trim(),
+        validUntil: new Date(validUntil).toISOString(),
+        voteOptions: options.map((o) => o.trim())
       };
 
-      const pollRes = await fetch("/api/polls", {
+      const res = await fetch("/api/v1/polls", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(pollPayload)
+        credentials: "same-origin",
+        body: JSON.stringify(payload)
       });
 
-      if (!pollRes.ok) {
-        alert("Failed to create poll");
-        return;
-      }
-
-      const createdPoll = await pollRes.json();
-      const pollId = createdPoll.id;
-
-      for (let i = 0; i < options.length; i++) {
-        const optionPayload = {
-          caption: options[i].trim(),
-          presentationOrder: i
-        };
-
-        const optionRes = await fetch(`/api/polls/${pollId}/options`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(optionPayload)
-        });
-
-        if (!optionRes.ok) {
-          alert(`Failed to create option: ${options[i]}`);
-          return;
-        }
+      if (!res.ok) {
+        const message = await res.text();
+        throw new Error(message || "Failed to create poll");
       }
 
       alert("Poll created successfully!");
-      
       question = "";
       options = ["", ""];
-      createdByUserId = null;
       validUntil = "";
-      
+      dispatch("poll-created");
     } catch (error) {
       console.error("Error creating poll:", error);
       alert("Failed to create poll");
+    } finally {
+      submitting = false;
     }
   }
 </script>
@@ -79,30 +74,20 @@
   <p class="panel-hint">Draft a question and add options for people to vote on.</p>
 
   <div class="form-group">
-    <label for="userId">Your User ID:</label>
-    <input 
-      id="userId"
-      type="number" 
-      placeholder="User ID" 
-      bind:value={createdByUserId} 
-    />
-  </div>
-
-  <div class="form-group">
     <label for="question">Question:</label>
-    <input 
+    <input
       id="question"
-      placeholder="Enter your poll question" 
-      bind:value={question} 
+      placeholder="Enter your poll question"
+      bind:value={question}
     />
   </div>
 
   <div class="form-group">
-    <label for="validUntil">Expires (optional):</label>
-    <input 
+    <label for="validUntil">Expires at:</label>
+    <input
       id="validUntil"
-      type="datetime-local" 
-      bind:value={validUntil} 
+      type="datetime-local"
+      bind:value={validUntil}
     />
   </div>
 
@@ -110,13 +95,13 @@
     <h3>Options:</h3>
     {#each options as option, i}
       <div class="option-row">
-        <input 
-          placeholder="Option {i + 1}" 
-          bind:value={options[i]} 
+        <input
+          placeholder="Option {i + 1}"
+          bind:value={options[i]}
         />
         {#if options.length > 2}
-          <button 
-            type="button" 
+          <button
+            type="button"
             class="remove-btn"
             onclick={() => removeOption(i)}
           >
@@ -129,6 +114,8 @@
 
   <div class="actions">
     <button type="button" onclick={addOption}>+ Add Option</button>
-    <button type="button" onclick={submit} class="primary">Create Poll</button>
+    <button type="button" onclick={submit} class="primary" disabled={submitting}>
+      {submitting ? "Creating…" : "Create Poll"}
+    </button>
   </div>
 </div>

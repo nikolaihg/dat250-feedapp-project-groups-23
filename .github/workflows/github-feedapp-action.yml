@@ -2,6 +2,16 @@ name: TestAndBuild
 on: [push]
 jobs:
   test:
+    services:
+      rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+        - "5672:5672" # AMQP
+        - "15672:15672" # Dashboard
+      redis:
+        image: redis:latest
+        ports:
+          - "6379:6379"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -27,4 +37,4 @@ jobs:
           java-version: 21
           distribution: 'adopt'
       - name: Build with gradle
-        run: ./gradlew build
+        run: ./gradlew bootJar -x test
