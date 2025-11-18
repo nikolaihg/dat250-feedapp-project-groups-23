@@ -27,14 +27,3 @@ jobs:
         with:
           name: test-reports
           path: backend/build/reports/tests/test
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 21
-        uses: actions/setup-java@v2
-        with:
-          java-version: 21
-          distribution: 'adopt'
-      - name: Build with gradle
-        run: ./gradlew bootJar -x test
