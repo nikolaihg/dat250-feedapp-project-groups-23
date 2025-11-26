@@ -134,3 +134,63 @@ technologies. Table~\ref{tab:results} gives an example of how to create a table.
 	\caption{Selected experimental results on the communication protocol example.}
 	\label{tab:results}
 \end{table}
+
+\subsubsection{Readability and Maintainability}
+
+To verify the hypotheses that Kotlin code is more readable than Java code we
+took the lines of code into account. \\
+Our assumptions in regard to this factor is that code is generally more
+readable if it has less lines of code compared to another language.
+The reasoning for this is: The fewer lines of code a programming language uses the
+more readable it is, because the code will be more compact and easier to
+get an overview of. Additionally fewer lines of code indicate that the
+programming language uses less boilerplate making it easier to read. \\
+Additionally to the code being more readable it is also easier to maintain due
+to there being fewer lines making it easier to identify where modifications need
+to be made.
+
+To compare the lines of code we created a comparison project in Java and used
+the tool cloc\cite{cloc} to compare the projects. Figure \ref{fig:locKoltin} and
+\ref{fig:locJava} show the result of this comparison and shows that for the same
+project Kotlin uses 29\% fewer lines of code than Java. The biggest difference
+in the lines of code stems from data classes in Kotlin not requiring
+constructors and getters/setters. Making the data classes a lot shorter and
+thereby easier to read and understand. \\
+Even though Java also offers a way of creating class without the need for
+getters and setters in the form of \lstinline{records} they are not entirely
+interchangeable with classes and for example can not be used to create
+\lstinline{JPA} entities, because they are final \cite{record}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{./figs/locKotlin.png}
+	\caption{Lines of code Kotlin prototype.}
+	\label{fig:locKoltin}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{./figs/locJava.png}
+	\caption{Lines of code Java comparison project.}
+	\label{fig:locJava}
+\end{figure}
+
+Even though Kotlin uses fewer lines of code and is generally more readable
+because of that, there are exceptions. The following two code examples show the
+same logic for calling a function and returning something depending on whether
+the function returns an object or not in Kotlin and Java. Even though Kotlin
+uses just two lines of code in comparison to Javas six it is arguably less
+readable.
+
+\begin{lstlisting}[language=Java, caption=Function call and verification in Kotlin]
+return feedAppManager.addPoll(username, pollRequest)?.let { ResponseEntity.ok(it) }
+        ?: ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption=Function call and verification in Java]
+Poll poll = feedAppManager.addPoll(username, pollRequest);
+if (poll != null) {
+	return ResponseEntity.ok(poll);
+} else {
+	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+}
+\end{lstlisting}
