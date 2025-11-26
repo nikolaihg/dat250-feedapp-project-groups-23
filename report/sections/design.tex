@@ -3,7 +3,7 @@
 This section of the report outlines three core concepts when it comes to designing our FeedApp prototype. First a outline of the functional behavior of the system by defining the main use cases and describing them with a UML use case diagram. Then the core domain model, and finally the system architecture of the application and its related technologies. Together these elements form the blueprint for our prototype implementation of polling application, and provides a foundation for the implementation described in section~\ref{sec:implementation}.
 
 \subsection{Use Cases}
-As mentioned the main purpose of a use case model is to capture the behavior of a system from a users perspective and clarify which roles interact with isolated parts of the application. When making a use case diagram for the system, we identified five main use cases. And the system distinguishes between three primary actors. The complete use case diagram is shown in Figure~\ref{fig:use-case-diagram}.
+As mentioned, the main purpose of a use case model is to capture the behavior of a system from a user's perspective and clarify which roles interact with isolated parts of the application. The complete use case diagram is shown in Figure~\ref{fig:use-case-diagram}. While developing this diagram we identified six main use cases and distinguished between three primary actors within the system
 
 \subsubsection*{Primary actors:}
 \begin{itemize}
@@ -12,22 +12,25 @@ As mentioned the main purpose of a use case model is to capture the behavior of 
     \item \textbf{External Subscriber}: An external system or service subscribing to poll and vote events via RabbitMQ.
 \end{itemize}
 
-Although the business logic supports anonymous interaction at a domain level, all API endpoints are protected by OAuth 2 in our prototype. This means that uses still must authenticate before accessing the application. However, once authenticated users can cast votes without their identity being visible in the polls.
+\noindent Although the business logic supports anonymous interaction at a domain level, all API endpoints are protected by OAuth 2 in our prototype. This means that uses still must authenticate before accessing the application. However, once authenticated users can cast votes without their identity being visible in the polls.
 
 \subsubsection*{Core use cases:}
 \begin{itemize}
     \item \textbf{Register / Authenticate User:}
     Before interacting with the system users must authenticate using Github OAuth2. This case allows a user to log into the system and establishes their identity within the application. When the authentication is successful a corresponding User entity created or retrieved in the backend. This use case is a prerequisite for all other user actions in the system and to view protected endpoints.
-    \item \textbf{Create/Delete Poll:}
-    A registered user can create a poll by submitting a question along with a set of vote options. Each poll must contains a minimum of two vote options. The backend also persist the created vote in a relational database and a event is published to RabbitMQ. This allows external subscribers to be notified about newly created polls. Registered users can also update or delete polls registered under their ID.
+    \item \textbf{Create Poll:}
+    A registered user can create a poll by submitting a question along with a set of vote options. Each poll must contains a minimum of two vote options.
+    \item \textbf{Delete Poll:}
+    Registered users can delete polls that they have created.
     \item \textbf{View Poll:}
-    Users can view existing polls. This use case retrieves a list of polls from the backend. T
+    Users can both view the information about a poll, and view the aggregated vote results for a poll.
     \item \textbf{Cast Vote:}
+    Users can vote on a selected poll by choosing one of the available vote options. 
     \item \textbf{Subscribe to Events:}
+    External subscribers can subscribe to a poll event though the messaging system.
 \end{itemize}
 
-
-These use cases define the most important functional aspects of the FeedApp prototpye and illustrates how users and external services interact with the system. 
+\noindent Our use case diagram~\ref{fig:use-case-diagram} also reflects logical dependencies in the system. For example, casting a vote includes that a poll is first viewed, deleting a poll requires that the poll has been created. Together these use cases define the most important functional aspects of the FeedApp prototype and illustrates how users and external services interact with the system. 
 
 \begin{figure}[H]
 	\centering
@@ -37,7 +40,12 @@ These use cases define the most important functional aspects of the FeedApp prot
 \end{figure}
 
 \subsection{Domain Model}
-The domain model outlines the required entities for the application and polling system, e.g. \texttt{Users}, \texttt{Polls}, \texttt{VoteOptions}. The model also defines their relationships, constrains and wether they are entities or value objects.  
+The domain model shown in Figure~\ref{fig:domain-model-diagram}, describes the fundamental entities and their relationships that are required in the business logic of the application. It focuses on the entities requires in the domain and the value objects, not including entities required for technical infrastructure and application-level services (e.g. configuration classes and crud repositories). The model consists of four main entities; \texttt{}{User}, \texttt{Poll}, \texttt{VoteOption} and \texttt{Vote}. As well as one value object \texttt{VoteOptionCount}, Both \texttt{User} and \texttt{Pol} is defined as \textit{aggregate roots} according to the aggregate pattern described in Domain-Driven-Design\cite{fowler:13}.
+
+The \texttt{User} entity represents a registered user in the system, and is uniquely identified by a username. A user can create multiple polls and cast multiple votes. Therefore the user entity has one-to-many relationships with both \texttt{Poll} and \texttt{Vote}. The Poll entity represents a poll topic created by a user. Each poll contains a question, a publication timestamp and a valid period, A poll also contains at least two \texttt{VoteOptions} and is assigned to one creator. As an aggregate root, a poll manages the life cycle of its associated vote options.
+
+The \texttt{VoteOption} represents a selectable option within a poll. Each vote option belongs exactly to one poll and can receive many votes. The \texttt{Vote} entity represents a single vote cast by a user. A vote references exactly one vote option, when it was cast, and which user who voted on what vote option. The last object of our domain model is the \texttt{VoteOptionCount}. This is a value object rather than a persistent entity. It is derived and represents a view consisting of a vote option caption and its vote count. This is used for showing the votes in the frontend not for persistence.  
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.33]{figs/domain-model.png}
@@ -45,18 +53,26 @@ The domain model outlines the required entities for the application and polling 
 	\label{fig:domain-model-diagram}
 \end{figure}
 
+\subsubsection*{The relationships in the model is defined as:}
+\begin{itemize}
+    \item A user may create many polls.
+    \item A poll must contain at least two vote options.
+    \item A polls results are derived from its vote options and the associated votes. 
+    \item A user can cast many votes, but each vote is associated with exactly one vote option.
+\end{itemize}
+
+This domain model is the foundation for the object-relation mapping using JPA/Hibernate, the de-/serialization of the objects and the REST resource structure of the application. 
+
 \subsection{Architecture}
-The system architecture of the application is illustrated in figure~\ref{fig:sys-arc-diagram} and shows how all the included technologies collaborate and how the backend is constructed. 
-Presentation Layer
+The system architecture of our application follows a traditional structure with a frontend and a backend. See Figure~\ref{fig:sys-arc-diagram} for a diagram illustrating the architecture. Our prototype simulates a enterprise level application with many modern technologies included. This architecture satisfies the both the projects functional and non-functional requirements, such as integration a cache and a message broker.
 
-Application Layer
+The presentation layer of our application consists of a single-page application implemented using Svelte. This frontend provides a graphical user interface fore creating polls, voting and viewing the results. It communicates with the backend using HTTP Rest endpoints via \texttt{/api/v1/*}. As mentioned previously after authentication, the frontend automatically retrieves the authenticated user via a user endpoint. The backend and business logic is implemented using Spring Boot with Kotlin. This layer is the main part of our FeedApp and consists of a series of REST controllers, which expose the application functionality. There is also a central manager that ensures a clear separation between API handling and business logic.
 
-Persistance
+Security is handled using OAuth2 via Github. A configuration component ensures that all protected endpoints are secure. The domain is implemented in Kotlin and annotated using JPA so that persistence can be handled using a H2 relational database in development, and a PostgreSQL for production. Spring repositories are used to reduce boilerplate for data access by providing CRUD access to all aggregate roots and entities. The application also implements a Redis Cache for frequently accessed polls, which reduces database load for high-traffic queries.
 
-Integrated Components
+The messaging system is implemented by using RabbitMQ as an event broker. When a poll is created or a vote is cast, the backend publishes the corresponding event to a topic exchange. These events can be viewed externally by subscribed clients. This makes logging of system easier. The deployment and CI/CD is based on Docker and Github Actions. Local development uses docker compose to orchestrate images for the backend, Redis and RabbitMQ. The pipeline automatically tests the backend on push. And a separate action tests and builds the Docker Image to Docker Hub, ensuring reproducible builds and simple deployment.
 
-DevOps
-
+Overall the architecture implements a clean separation of concerns, supports caching and messaging and demonstrates a modern enterprise cloud-ready stack.
 
 \begin{figure}[H]
 	\centering
