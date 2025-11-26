@@ -1,21 +1,33 @@
 \section{Design}
 \label{sec:design}
-
-Around 5 pages about functional aspects of the FeedApp application.
-
-Concretely, you shall write about 
-
-\begin{itemize}
-	\item the \emph{use cases},
-	\item the \emph{domain model}, and
-	\item the \emph{architecture} (including applied technologies)
-\end{itemize}
-
-Each part shall ideally be accompanied with a graphical representation (diagram).
-
-You may have a look at the \href{https://github.com/selabhvl/dat250public/blob/master/projectdescription/README.md}{Examples on GitHub}.
+This section of the report outlines three core concepts when it comes to designing our FeedApp prototype. First a outline of the functional behavior of the system by defining the main use cases and describing them with a UML use case diagram. Then the core domain model, and finally the system architecture of the application and its related technologies. Together these elements form the blueprint for our prototype implementation of polling application, and provides a foundation for the implementation described in section~\ref{sec:implementation}.
 
 \subsection{Use Cases}
+As mentioned the main purpose of a use case model is to capture the behavior of a system from a users perspective and clarify which roles interact with isolated parts of the application. When making a use case diagram for the system, we identified five main use cases. And the system distinguishes between three primary actors. The complete use case diagram is shown in Figure~\ref{fig:use-case-diagram}.
+
+\subsubsection*{Primary actors:}
+\begin{itemize}
+    \item \textbf{Anonymous User}: A user who is anonymous.
+    \item \textbf{Registered User}: A user authenticated via Github OAuth2.
+    \item \textbf{External Subscriber}: An external system or service subscribing to poll and vote events via RabbitMQ.
+\end{itemize}
+
+Although the business logic supports anonymous interaction at a domain level, all API endpoints are protected by OAuth 2 in our prototype. This means that uses still must authenticate before accessing the application. However, once authenticated users can cast votes without their identity being visible in the polls.
+
+\subsubsection*{Core use cases:}
+\begin{itemize}
+    \item \textbf{Register / Authenticate User:}
+    Before interacting with the system users must authenticate using Github OAuth2. This case allows a user to log into the system and establishes their identity within the application. When the authentication is successful a corresponding User entity created or retrieved in the backend. This use case is a prerequisite for all other user actions in the system and to view protected endpoints.
+    \item \textbf{Create/Delete Poll:}
+    A registered user can create a poll by submitting a question along with a set of vote options. Each poll must contains a minimum of two vote options. The backend also persist the created vote in a relational database and a event is published to RabbitMQ. This allows external subscribers to be notified about newly created polls. Registered users can also update or delete polls registered under their ID.
+    \item \textbf{View Poll:}
+    Users can view existing polls. This use case retrieves a list of polls from the backend. T
+    \item \textbf{Cast Vote:}
+    \item \textbf{Subscribe to Events:}
+\end{itemize}
+
+
+These use cases define the most important functional aspects of the FeedApp prototpye and illustrates how users and external services interact with the system. 
 
 \begin{figure}[H]
 	\centering
@@ -25,7 +37,7 @@ You may have a look at the \href{https://github.com/selabhvl/dat250public/blob/m
 \end{figure}
 
 \subsection{Domain Model}
-
+The domain model outlines the required entities for the application and polling system, e.g. \texttt{Users}, \texttt{Polls}, \texttt{VoteOptions}. The model also defines their relationships, constrains and wether they are entities or value objects.  
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.33]{figs/domain-model.png}
@@ -34,10 +46,21 @@ You may have a look at the \href{https://github.com/selabhvl/dat250public/blob/m
 \end{figure}
 
 \subsection{Architecture}
+The system architecture of the application is illustrated in figure~\ref{fig:sys-arc-diagram} and shows how all the included technologies collaborate and how the backend is constructed. 
+Presentation Layer
+
+Application Layer
+
+Persistance
+
+Integrated Components
+
+DevOps
+
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[scale=0.3]{figs/system-architecture.png}
-	\caption{UML use case diagram of protoype}
+	\caption{Diagram of the system architecture}
 	\label{fig:sys-arc-diagram}
 \end{figure}

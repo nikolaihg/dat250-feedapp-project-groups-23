@@ -2,7 +2,7 @@
 \label{sec:introduction}
 
 \subsection{Motivation}
-Kotlin is a language that aims to solve many of the painpoints associated with Java as a programming language, while still utilizing the benefits around the JVM ecosystem, while also providing stronger type safety, null-safety features, and a more expressive syntax that combines principles from functional programming with object-oriented design.
+Kotlin is a language that aims to solve many of the painpoints associated with Java as a programming language. By utilizing the benefits around the JVM ecosystem, while also providing stronger type safety, null-safety features, and a more expressive syntax that combines principles from functional programming with object-oriented design. 
 
 In this project, we aim to assess whether Kotlin combined with the auto-configuration and dependency injection mechanisms of Spring Boot can lead to faster, more concise, and more maintainable development while preserving the robustness required for enterprise applications.
 
@@ -12,13 +12,13 @@ Our \textit{FeedApp} protoype is implemented as a full-stack web application whe
 The backend system in built using Spring Boot with Kotlin. Peristance is implemented using JPA and a H2 relational database for storage. A redis cache mitigates potential delays for the polls. And poll events are published though RabbitMQ as a message broker, enabling external clients to subscribe to events. The entire system is containerised with docker, with images for Gradle, Redis and RabbitMQ orhestraded through \textit{docker compose}. CI/CD-integration is done via github-actions and a image is uploaded to dockerhub.
 
 \subsection{Results}
-The resulting prototype demonstrates that Kotlin can be integrated seamlessly within the Spring Boot ecosystem and CI/CD toolchains.
+The resulting prototype demonstrates that Kotlin can be integrated seamlessly within the Spring Boot ecosystem and CI/CD toolchains. 
 
 \noindent(...)
 
 \subsection{Overview}
-The rest of this report is organised as follows:
-Section~\ref{sec:design} presents the design of the FeedApp prototype, including its use cases, domain model, and architecture.
-Section~\ref{sec:technology} contains a technology assessment of Kotlin according to the Brown and Wallnau framework.
-Section~\ref{sec:implementation} describes the implementation details and integration of the components.
+The rest of this report is organised as follows:  
+Section~\ref{sec:design} presents the design of the FeedApp prototype, including its use cases, domain model, and architecture.  
+Section~\ref{sec:technology} contains a technology assessment of Kotlin according to the Brown and Wallnau framework.  
+Section~\ref{sec:implementation} describes the implementation details and integration of the components.  
 Finally, Section~\ref{sec:conclusion} concludes the report and summarizes the lessons learned from applying Kotlin within an enterprise-oriented stack.

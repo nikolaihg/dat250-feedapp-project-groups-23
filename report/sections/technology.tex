@@ -23,18 +23,64 @@ Consider drawing a graph like in \cite{brown:96}.
 \subsection{Experiment Design}
 \subsubsection{Introduction}
 
-The selection of the programming language is one of the first and most significant decisions in development. It reflects productivity, quality, and maintainability of the software being developed. In today's back-end era, the default pick of enterprise systems remains Java. This is because the language is mature, stable, and highly supported. Kotlin, a fairly new statically typed programming language, is threatening Java. It is completely compatible with Java and enjoys the official backing of the Spring Framework. Kotlin is guaranteed to be safer and shorter to code without sacrificing compatibility with current JVM technologies. This paper aims to utilize Kotlin rather than Java in building a web application of voting polls on the Brown and Wallnau's Technology Delta Framework (1999). The said framework provides a systematic way of establishing the value of a technology over another and the consequent use of the technology genealogies, delta feature sets, and real application case scenarios. The strategy uses the trade-off between value and risk and the next value of technology.
+The selection of a programming language is one of the first and most consequential decisions in backend development, as it affects productivity, maintainability, and software quality. In today’s enterprise landscape, Java remains the default choice for many organisations due to its maturity, stability, and extensive ecosystem. Kotlin, a more recent statically typed language targeting the JVM, offers a different point in the design space: it is fully interoperable with Java while aiming to improve type safety, reduce boilerplate, and provide more expressive language constructs.
 
+In this project, we use Brown and Wallnau’s Technology Delta Framework (1996/1999) to evaluate the use of Kotlin instead of Java for a poll-voting web application. The framework guides us to (i) analyse the genealogy of the technologies, (ii) characterise the problem habitat in which they are applied, and (iii) identify feature deltas that may influence quality, cost, and performance. These deltas then form the basis for a set of refutable hypotheses and experiments such as model problems, micro-benchmarks, and demonstrator case studies that allow us to reason systematically about the added value and risks of adopting Kotlin.
 
-The choice of the application, REST-based poll-voting feature with user support for creating polls, voting, and viewing results in real-time is a realistic and challenging backend development project. It requires the capability to manage system concurrency, ensure transactional consistency of the system, provide system scalability and fast feature iteration. It is therefore well-suited to test out some of Kotlin's new language features such as null-safety, coroutines, data classes, and type inference.
-
-
-This research compares Kotlin and Java, not as distinct programming languages but as different technology stacks to solve the same application development issue in a given context.
-
-It aims to establish whether Kotlin brings a real improvement in a programmer's productivity and system stability as long as there are no compromises in execution performance and interoperability. Following Brown and Wallnau, the experiment aims to provide a justification for Kotlin adoption in the proposed software situation, evidenced by facts through descriptive modeling, experiment design, and evaluation.
+The chosen application is a REST-based poll-voting system where users can create polls, cast votes, and view results provides a realistic habitat for this evaluation. It stresses concurrency handling, transactional consistency, scalability, and rapid evolution of business logic. This makes it well-suited to test whether Kotlin’s features such as null-safety, data classes, coroutines, and type inference lead to measurable benefits over Java. 
 
 \subsection{Descriptive Modelling}
-The first phase of the Technology Delta Framework involves constructing a descriptive model of the technologies being compared. This stage identifies their genealogy, situates them within the problem habitat, and defines the feature deltas that distinguish one technology from the other. The goal is to establish a clear conceptual understanding of what Kotlin introduces beyond Java, before any empirical testing is undertaken.
+
+\section*{Kotlin: Genealogy, Habitat, and Problem Context}
+\subsection*{1. Genealogy}
+\begin{itemize}
+    \item \textbf{Origin (2011):} Created by \textbf{JetBrains} (makers of IntelliJ). Designed not as an academic experiment, but as a tool to boost industry productivity.
+    \item \textbf{Turning Point (2017):} Google announced Kotlin as a first-class language for Android, shifting it from a niche alternative to an industry standard.
+\end{itemize}
+
+\subsection*{2. Habitat}
+\begin{itemize}
+    \item \textbf{JVM Ecosystem:} Kotlin lives on the Java Virtual Machine.
+    \item \textbf{Interoperability:} Its defining feature is 100\% interoperability. Kotlin code can call Java code (and vice-versa) within the same project, allowing for incremental adoption rather than a total rewrite.
+\end{itemize}
+
+\subsection*{3. Problem Context}
+Kotlin was engineered specifically to fix the shortcomings of Java:
+\begin{description}
+    \item[Null Safety:] Addresses the 
+    NullPointerExceptions by baking null-checks directly into the type system.
+    \item[Verbosity:] Drastically reduces boilerplate code. Standard tasks (POJOs, Getters/Setters) are often reduced from 50 lines in Java to 1 line in Kotlin.
+    \item[Concurrency:] Solves the complexity of multi-threading with \textit{Coroutines}, allowing asynchronous code to be written in a sequential, readable style.
+\end{description}
+
+\begin{table}[ht]
+    \centering
+    \caption{\textbf{Genealogy primitives applied to kotlin}}
+    \label{tab:kotlin_primitives}
+    \vspace{0.2cm}
+    
+    \begin{tabular}{l l p{4.5cm} p{5cm}} 
+        \toprule
+        \textbf{Primitive} & \textbf{Form} & \textbf{Interpretation} & \textbf{Application to Kotlin} \\
+        \midrule
+        Technology & Node & A class of functionality & JVM-based Programming Languages \\
+        
+        Specification & Node & Description for producers consumers & The Kotlin Language Specification \\
+        
+        Product & Node & Implementation of a technology & The Kotlin Compiler (kotlinc) \& Standard Library \\
+        
+        Peer & Link & Nodes with similar features & Scala, Groovy  \\
+        
+        Competitor & Link & Products that compete in the marketplace & Java , Swift for mobile \\
+        
+        Problem context & Link & Problems addressed by a node & Null-safety, Verbosity of Java, Asynchronous complexity \\
+        
+        Is-a & Link & Instance of a technology & Kotlin \textit{is-a} statically typed language \\
+        
+        Part-of & Link & Bundled products/specs & Kotlin Coroutines \textit{part-of} Kotlin ecosystem \\
+        \bottomrule
+    \end{tabular}
+\end{table}
 
 \subsubsection{Technology Genealogy}
 Java and Kotlin have a shared family of technologies, the Java Virtual Machine (JVM) platform.
@@ -43,6 +89,37 @@ Kotlin was created by JetBrains in 2011. Kotlin was marketed as a practical evol
 It was designed to solve Java's verbosity, its null-safety gap, and poor support for modern development paradigms with complete Java library and framework interoperability. It is also formally supported by notable JVM frameworks like Spring and Android and compiles to the same JVM bytecode. The design of Kotlin is conciseness-focused and safety, with interoperability, whereby one may use a more expressive syntax and a stable type system. Kotlin does not replace Java yet, however, it can be said to be an evolutionary offspring on the JVM family tree. It takes the core features of Java and extends them with other language elements from functional languages and statically typed languages like Scala, Swift, and C\#.
 
 \subsubsection{Problem Habitat}
+
+The technologies are evaluated in the context of a \textit{server-side poll-voting web application}. 
+The system allows users to create polls, submit votes, and retrieve aggregate results via a REST-based 
+HTTP API. This environment is representative for modern web backends built on the JVM and exposes 
+several characteristics that are particularly relevant when comparing Java and Kotlin.
+
+First, the application must handle bursty, concurrent traffic. Multiple users can vote on the same 
+poll in a short period of time, which results in many parallel requests to endpoints such as 
+\texttt{POST /vote} and \texttt{GET /tally}. The backend therefore needs efficient concurrency mechanisms 
+to process I/O-bound operations caching, and network calls without exhausting threads.
+
+Second, the domain requires strong data integrity and consistency. Each user should only be able to 
+vote once per poll and each vote must be recorded exactly once. This implies transactional interactions 
+with the persistence layer, correct handling, and careful management of edge cases 
+such as duplicate submissions, retries, and partial failures. Subtle bugs in null-handling or state 
+modelling can lead directly to incorrect results.
+
+Third, the system must deliver low-latency responses under load. Users expect the poll results to update 
+quickly after voting, and the application may be deployed in environments with limited resources. This 
+puts pressure on both the runtime performance of the language features and the clarity of the asynchronous 
+control flow implemented.
+
+Finally, the project is developed in an educational and iterative setting, where requirements evolve and 
+features are frequently adjusted. This makes the process more productive and readable.
+The backend is built on the Spring ecosystem, originally designed for Java.
+
+In summary, the habitat is a JVM-based web backend that emphasises concurrency, correctness, 
+performance, and evolvability. This environment makes it possible to meaningfully assess 
+whether Kotlin's language features such as null-safety, data classes, coroutines, and extension functions
+provide measurable advantages over Java when applied to a realistic application.
+
 
 \subsubsection{Feature Deltas}
 
@@ -55,9 +132,9 @@ These are the ``points of departure'' that may influence quality, cost, or perfo
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{@{}p{0.17\linewidth} p{0.17\linewidth} p{0.17\linewidth} p{0.17\linewidth}@{}}
 \toprule
-\textbf{Feature Delta} & \textbf{Java (Baseline)} & \textbf{Kotlin (New Capability)} & \textbf{Potential Impact} \\
+\textbf{Feature Delta} & \textbf{Java (Baseline)} & \textbf{Kotlin (New Capability)} & \textbf{Potential Impact} \\ 
 \midrule
-\textbf{Null-safety} &
+\textbf{Null-safety} & 
 Nullable references unchecked at compile time &
 Non-nullable types enforced by compiler &
 Reduces null pointer exceptions and improves reliability. \\
@@ -73,7 +150,7 @@ Implicit typing with smart inference &
 Simplifies code and reduces cognitive load on developers. \\
 
 \textbf{Coroutines and structured concurrency} &
-Threads, Executors, \texttt{CompletableFuture}, or Virtual Threads &
+Threads, Executors, CompletableFuture, or Virtual Threads &
 Lightweight coroutines with \texttt{suspend} functions &
 Improves scalability and simplifies asynchronous programming. \\
 
@@ -87,9 +164,9 @@ Limited polymorphic control (until Java 17) &
 Exhaustive \texttt{when} expressions and sealed hierarchies &
 Safer domain modelling and compile-time exhaustiveness checks. \\
 
-\textbf{Interop with Java} &
-Native language; direct compatibility &
-Full interop using \texttt{@Jvm*} annotations and mixed modules &
+\textbf{Interoperability with Java} &
+Native language, direct compatibility &
+Full interoperability using \texttt{@Jvm*} annotations and mixed modules &
 Enables gradual adoption and reuse of existing Java codebases. \\
 
 \textbf{Tooling and ecosystem support} &
@@ -106,8 +183,6 @@ From a descriptive perspective, Kotlin’s deltas can be grouped into three broa
     \item \textbf{Expressiveness} – enabled by concise syntax, data classes, and extension functions.
     \item \textbf{Concurrency and performance} – improved through lightweight coroutines and structured concurrency.
 \end{enumerate}
-
-These deltas form the foundation for the next phase of the framework—designing controlled experiments and refutable hypotheses to measure Kotlin’s actual added value over Java within this software habitat.
 
 \subsection{Experiment Evaluation}
 
@@ -134,3 +209,63 @@ technologies. Table~\ref{tab:results} gives an example of how to create a table.
 	\caption{Selected experimental results on the communication protocol example.}
 	\label{tab:results}
 \end{table}
+
+\subsubsection{Readability and Maintainability}
+
+To verify the hypotheses that Kotlin code is more readable than Java code we
+took the lines of code into account. \\
+Our assumptions in regard to this factor is that code is generally more
+readable if it has less lines of code compared to another language.
+The reasoning for this is: The fewer lines of code a programming language uses the
+more readable it is, because the code will be more compact and easier to
+get an overview of. Additionally fewer lines of code indicate that the
+programming language uses less boilerplate making it easier to read. \\
+Additionally to the code being more readable it is also easier to maintain due
+to there being fewer lines making it easier to identify where modifications need
+to be made.
+
+To compare the lines of code we created a comparison project in Java and used
+the tool cloc\cite{cloc} to compare the projects. Figure \ref{fig:locKoltin} and
+\ref{fig:locJava} show the result of this comparison and shows that for the same
+project Kotlin uses 29\% fewer lines of code than Java. The biggest difference
+in the lines of code stems from data classes in Kotlin not requiring
+constructors and getters/setters. Making the data classes a lot shorter and
+thereby easier to read and understand. \\
+Even though Java also offers a way of creating class without the need for
+getters and setters in the form of \lstinline{records} they are not entirely
+interchangeable with classes and for example can not be used to create
+\lstinline{JPA} entities, because they are final \cite{record}.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{./figs/locKotlin.png}
+	\caption{Lines of code Kotlin prototype.}
+	\label{fig:locKoltin}
+\end{figure}
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=\textwidth]{./figs/locJava.png}
+	\caption{Lines of code Java comparison project.}
+	\label{fig:locJava}
+\end{figure}
+
+Even though Kotlin uses fewer lines of code and is generally more readable
+because of that, there are exceptions. The following two code examples show the
+same logic for calling a function and returning something depending on whether
+the function returns an object or not in Kotlin and Java. Even though Kotlin
+uses just two lines of code in comparison to Javas six it is arguably less
+readable.
+
+\begin{lstlisting}[language=Java, caption=Function call and verification in Kotlin]
+return feedAppManager.addPoll(username, pollRequest)?.let { ResponseEntity.ok(it) }
+        ?: ResponseEntity.status(HttpStatus.NOT_FOUND).build()
+\end{lstlisting}
+
+\begin{lstlisting}[language=Java, caption=Function call and verification in Java]
+Poll poll = feedAppManager.addPoll(username, pollRequest);
+if (poll != null) {
+	return ResponseEntity.ok(poll);
+} else {
+	return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+}
+\end{lstlisting}

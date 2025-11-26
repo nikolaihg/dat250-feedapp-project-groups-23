@@ -1,15 +1,59 @@
 \section{Prototype Implementation}
 \label{sec:implementation}
+\NewDocumentCommand{\codeword}{v}{%
+\texttt{\textcolor{blue}{#1}}%
+}
 
-This section should provide brief details of how the prototype has been implemented.
-You may want to use come code snippets here, but only focus on core features and aspects.
-You are not meant to copy/paste your whole application code into the report.
-Focus for instance how other developers may run your application and how they might develop it further...
+The prototype is implemented as a monorepo project. Meaning that both the
+frontend and backend application are in the same parent folder/github
+repository. Both the applications can be build and executed using gradle.
 
+\subsection{Building and running the project}
 
-The example below shows how you may include code. There are similar
-styles for many other langages - in case you do not use Java in your
-project. You can wrap the listing into a figure in case you need to
-refer to it. How to create a figure was shown in Section~\ref{sec:technology}.
+There exist gradle tasks for building and starting the application. The steps
+needed for this are:
+\begin{enumerate}
+	\item Build the frontend application and copy it to the correct location in the
+	backend folder, so that the frontend will be hosted by the backend.
+	Command: \codeword{gradle copyWebApp}
+	\item Start the backend application. Command: \codeword{gradle bootRun}
+\end{enumerate}
 
-\lstinputlisting[language=java]{code/BoksVolum.java}
+The backend depends on a RabbitMQ and Redis instance to be running. The ports
+and URLs for this can be configured via environment variables
+(\codeword{SPRING_REDIS_HOST}, \codeword{SPRING_REDIS_PORT},
+\codeword{SPRING_RABBITMQ_HOST}, \codeword{SPRING_RABBITMQ_PORT}). To simplify
+the development and deployment process there is a docker compose file in the
+project directory which will automatically create and start Docker containers
+for the backend application as well as containers for RabbitMQ and Redis.
+
+For security reasons the project is configured in a way that the backend will
+only accept reqeusts from the same origin, so starting the frontend application
+separately via tools like \codeword{npm} and trying to connect to a different
+instance of the backend application will not work.
+
+\subsection{Authentication}
+
+As the method of authentication and authorization GitHub OAuth2 is used. This
+means a user will have to log in to their GitHub account in order to use the
+FeedApp. Connecting a Spring application to an OAuth2 provider only requires
+minimal configuration. All that is needed is adding the following dependency
+and configuring some properties.\\
+\codeword{implementation("org.springframework.boot:spring-boot-starter-oauth2-client")}
+Since for this project GitHub was used as the provider the only properties to
+configure were the client id, client secret and redirect URL configured in the
+GitHub OAuth application.
+
+\lstinputlisting{code/githubOauth.yml}
+
+The following code snippet depicts the default behaviour of the FeedApp when the
+user data is being retrieved. The FeedApp will try extracting the username from the
+OAuth2 token that is used to authenticate the request. If no such username
+exists in the token the controller will return an error (though this should never
+happen since SpringSecurity will redirect the request to the GitHub
+authentication page should no valid authentication exist). After extracting the
+username the FeedApp will try extracting information about the user from the
+database and create a new one if no user with the given username exists. Since the GitHub username 
+is unique it is used as the Id for the User object. 
+
+\lstinputlisting[language=java]{code/userController.java}
